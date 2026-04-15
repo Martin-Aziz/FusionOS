@@ -55,6 +55,30 @@ npm run dev
 docker-compose up --build
 ```
 
+### Offline USB Artifact (Windows/Linux)
+
+Create a portable offline installer bundle:
+
+```bash
+npm run build:portable
+```
+
+This command enforces offline-ready artifacts and requires Docker daemon running.
+
+For payload-only development bundles (without offline image tar files):
+
+```bash
+npm run build:portable:payload
+```
+
+On Windows PowerShell:
+
+```powershell
+npm run build:portable:win
+```
+
+Detailed instructions are in `docs/INSTALLATION.md`.
+
 ### Common Commands
 
 ```bash
@@ -95,6 +119,7 @@ If you discover a security issue, open a private report with maintainers before 
 
 - Architecture overview: `docs/ARCHITECTURE.md`
 - Delivery roadmap: `docs/ROADMAP.md`
+- Offline install guide: `docs/INSTALLATION.md`
 - MVP scope: `MVP_SCOPE.md`
 - Architecture decisions:
   - `docs/adr/ADR-001-kernel-base.md`

@@ -15,4 +15,22 @@ const envSchema = z
 
 export type AppEnv = z.infer<typeof envSchema>;
 
-export const env: AppEnv = envSchema.parse(process.env);
+const insecureSaltMarkers = ['replace-with', 'changeme', 'example', 'default'];
+
+const parsedEnv = envSchema.parse(process.env);
+
+if (parsedEnv.NODE_ENV === 'production') {
+  const tokenSalt = parsedEnv.DEVICE_TOKEN_SALT;
+  const isInsecureSalt =
+    !tokenSalt ||
+    tokenSalt.length < 32 ||
+    insecureSaltMarkers.some((marker) => tokenSalt.toLowerCase().includes(marker));
+
+  if (isInsecureSalt) {
+    throw new Error(
+      'Invalid DEVICE_TOKEN_SALT for production. Provide a strong random value with at least 32 characters.'
+    );
+  }
+}
+
+export const env: AppEnv = parsedEnv;

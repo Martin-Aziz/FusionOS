@@ -13,6 +13,9 @@
   "scripts": {
     "dev": "npm --workspace backend run dev",
     "build": "npm --workspace backend run build",
+    "build:portable": "npm run build && bash scripts/build-portable.sh",
+    "build:portable:payload": "npm run build && ENFORCE_OFFLINE=0 SKIP_IMAGES=1 bash scripts/build-portable.sh",
+    "build:portable:win": "npm run build && powershell -ExecutionPolicy Bypass -File scripts/build-portable.ps1",
     "typecheck": "npm --workspace backend run typecheck",
     "lint": "npm --workspace backend run lint",
     "test": "npm --workspace backend run test",

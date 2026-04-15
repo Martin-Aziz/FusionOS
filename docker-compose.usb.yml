@@ -1,13 +1,11 @@
 version: '3.9'
 services:
   app:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+    image: ${FUSIONOS_APP_IMAGE:-fusionos/app:0.1.0}
     env_file:
       - .env
     ports:
-      - '4000:4000'
+      - '${PORT:-4000}:4000'
     depends_on:
       postgres:
         condition: service_healthy
@@ -25,24 +23,19 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
-    deploy:
-      resources:
-        limits:
-          cpus: '1.00'
-          memory: 512M
 
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: trios
-      POSTGRES_PASSWORD: trios
-      POSTGRES_DB: trios
+      POSTGRES_USER: ${POSTGRES_USER:-trios}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trios}
+      POSTGRES_DB: ${POSTGRES_DB:-trios}
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT:-5432}:5432'
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U trios']
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-trios}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -53,7 +46,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - '6379:6379'
+      - '${REDIS_PORT:-6379}:6379'
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
@@ -66,9 +59,9 @@ services:
       app:
         condition: service_healthy
     ports:
-      - '8080:80'
+      - '${PROXY_PORT:-8080}:80'
     volumes:
-      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
 
 volumes:
   pg_data:
