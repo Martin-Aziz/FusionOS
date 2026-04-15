@@ -1,120 +1,110 @@
-# 🚀 FusionOS (working title)
+# FusionOS
 
-**Run anything. Anywhere. Together.**
+Run anything. Anywhere. Together.
 
-FusionOS is an open-source attempt to rethink what an operating system should be in the age of AI and heterogeneous software ecosystems.
+FusionOS is an open-source universal operating system initiative focused on unifying Linux-native workflows with compatibility-first Windows support and a future macOS path.
 
-Today, software is fragmented:
+## Why FusionOS
 
-* Windows apps run on Windows
-* Linux tools run on Linux
-* macOS software is locked to Apple devices
+Modern teams still split development across multiple operating systems. FusionOS aims to provide one host runtime and one package intelligence layer so software can be installed, executed, and managed across ecosystems without dual-boot friction or VM-heavy workflows.
 
-FusionOS aims to break these boundaries.
+## Project Status
 
----
+FusionOS is currently in Alpha. The repository provides a contract-first backend vertical slice, architecture documentation, and foundations for expanding runtime and desktop capabilities.
 
-## 🌐 What is FusionOS?
+## Core Pillars
 
-FusionOS is a **universal execution layer + operating system + agent platform** that allows:
+- Host Runtime: Linux-based foundation for Alpha
+- Compatibility Services: WinEnv and Linux routes first
+- Package Intelligence: Registry contracts and compatibility reporting
+- Desktop Experience: Shell integration contracts
+- Build and Release: CI, containers, and quality gates
 
-* Running **Windows, Linux, and macOS applications side-by-side**
-* Seamless interoperability between tools across ecosystems
-* A unified interface for managing processes, environments, and dependencies
-* Intelligent orchestration through **multi-agent systems**
+Reference architecture diagram: `trios_os_architecture.svg`.
 
-Think of it as:
+## Repository Layout
 
-> *An OS that doesn’t care where software comes from — only that it works.*
+```text
+backend/        Express + TypeScript API and tests
+common/         Shared schemas, types, and constants
+frontend/       Frontend application source
+docs/           Architecture and ADR documentation
+infra/          Infrastructure configuration (nginx, etc.)
+scripts/        Local automation scripts
+```
 
----
+## Getting Started
 
-## 🤖 Why Agents?
+### Prerequisites
 
-FusionOS is not just about compatibility — it's about **intelligence**.
+- Node.js 20+
+- Docker 24+
+- Docker Compose
 
-We are building a system where:
+### Local Development
 
-* Autonomous agents manage environments, dependencies, and execution
-* Tasks can be delegated, optimized, and parallelized
-* The OS becomes an active collaborator, not just a passive tool
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
----
+### Full Local Stack (Docker)
 
-## ⚙️ Core Ideas
+```bash
+docker-compose up --build
+```
 
-* **Universal Compatibility**
-  Abstract away OS-specific constraints
+### Common Commands
 
-* **Execution Layer Abstraction**
-  Translate and run binaries across systems
+```bash
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+```
 
-* **Agent-Oriented Architecture**
-  Use AI agents to manage and optimize the system
+## API Quick Check
 
-* **Composable System Design**
-  Everything is modular, hackable, and replaceable
+- `GET /health`
+- `GET /metrics`
+- `GET /api/v1/packages/search?q=photoshop&page=1&pageSize=10`
 
-* **Open by Default**
-  Built for transparency, extensibility, and community ownership
+For API contract details, see `API.md`.
 
----
+## Testing
 
-## 🔥 Why This Matters
+```bash
+npm run test
+npm run test:unit
+npm run test:integration
+npm run test:e2e
+```
 
-Developers waste time fighting environments instead of building.
+## Security
 
-FusionOS aims to:
+- Request validation via Zod
+- Helmet security headers
+- Rate limiting for global and sensitive endpoints
+- Correlation IDs and structured JSON logging
+- Generic internal error responses
 
-* Eliminate “works on my machine” forever
-* Reduce setup time to near zero
-* Enable true cross-platform development
-* Unlock new forms of human-AI collaboration at the system level
+If you discover a security issue, open a private report with maintainers before filing a public issue.
 
----
+## Documentation
 
-## 🧪 Current Status
+- Architecture overview: `docs/ARCHITECTURE.md`
+- Delivery roadmap: `docs/ROADMAP.md`
+- MVP scope: `MVP_SCOPE.md`
+- Architecture decisions:
+  - `docs/adr/ADR-001-kernel-base.md`
+  - `docs/adr/ADR-002-winenv-strategy.md`
+  - `docs/adr/ADR-003-telemetry-policy.md`
 
-This project is in its **early experimental phase**.
+## Contributing
 
-We are exploring:
+Contributions are welcome. Please read `CONTRIBUTING.md` before opening pull requests.
 
-* Binary translation & compatibility layers
-* Virtualization / container hybrid models
-* Agent orchestration frameworks
-* Cross-platform system APIs
+## License
 
----
-
-## 🤝 Contributing
-
-We’re looking for people who want to work on **hard, meaningful problems**:
-
-* Systems programming (C/C++/Rust)
-* Virtualization & OS internals
-* Compilers / binary translation
-* Distributed systems
-* AI agents & orchestration
-* UI/UX for developer tooling
-
-You don’t need to know everything — curiosity and drive matter more.
-
----
-
-## 🧠 Vision
-
-We believe the future OS will:
-
-* Be **platform-agnostic**
-* Be **AI-native**
-* Be **community-driven**
-
-FusionOS is a step in that direction.
-
----
-
-## ⭐ Join Us
-
-If this excites you, give the repo a star, open an issue, or start building.
-
-Let’s redefine what an operating system can be.
+This project is licensed under the MIT License. See `LICENSE` for details.

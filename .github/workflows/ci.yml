@@ -1,0 +1,42 @@
+name: CI Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Type Check (Fail Fast)
+        run: npm run typecheck
+
+      - name: Lint (Zero Warnings)
+        run: npm run lint -- --max-warnings=0
+
+      - name: Unit Tests with Coverage
+        run: npm run test:unit -- --coverage --coverageThreshold='{"global":{"branches":90,"functions":90,"lines":90,"statements":90}}'
+
+      - name: Integration Tests
+        run: npm run test:integration
+
+      - name: E2E Smoke Tests
+        run: npm run test:e2e
+
+      - name: Security Audit
+        run: npm audit --audit-level=moderate
+
+      - name: Build Verification
+        run: npm run build

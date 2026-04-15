@@ -1,0 +1,23 @@
+{
+  "name": "fusionos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FusionOS monorepo foundation",
+  "license": "MIT",
+  "workspaces": [
+    "backend"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "npm --workspace backend run dev",
+    "build": "npm --workspace backend run build",
+    "typecheck": "npm --workspace backend run typecheck",
+    "lint": "npm --workspace backend run lint",
+    "test": "npm --workspace backend run test",
+    "test:unit": "npm --workspace backend run test:unit",
+    "test:integration": "npm --workspace backend run test:integration",
+    "test:e2e": "npm --workspace backend run test:e2e"
+  }
+}
