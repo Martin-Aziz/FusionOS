@@ -1,135 +1,184 @@
 # FusionOS
 
-Run anything. Anywhere. Together.
+**One open system for every runtime world.**
 
-FusionOS is an open-source universal operating system initiative focused on unifying Linux-native workflows with compatibility-first Windows support and a future macOS path.
+FusionOS is an open-source Linux-based operating system and compatibility management layer. It helps users run Linux-native apps, Windows applications, games, developer tools, and isolated AI-agent workspaces from one managed environment.
 
-## Why FusionOS
+> **Alpha status.** FusionOS is in active development. The compatibility registry, runtime router, and web interface are functional. Agent workspace execution and Windows install automation are planned for Alpha 2–3.
 
-Modern teams still split development across multiple operating systems. FusionOS aims to provide one host runtime and one package intelligence layer so software can be installed, executed, and managed across ecosystems without dual-boot friction or VM-heavy workflows.
+---
 
-## Project Status
+## What FusionOS Is
 
-FusionOS is currently in Alpha. The repository provides a contract-first backend vertical slice, architecture documentation, and foundations for expanding runtime and desktop capabilities.
+- A **compatibility-first Linux-based OS** — Linux is the host, Windows apps run through Wine/Proton.
+- A **searchable compatibility registry** — look up any app, see its runtime route, compatibility level, known issues, and community reports before you install.
+- A **runtime router** — the system maps apps to the best execution path: native Linux, Flatpak, AppImage, Wine, Proton, container, VM, or agent workspace.
+- A **community reporting layer** — users submit what worked, on what hardware, through which route.
+
+## What FusionOS Is Not
+
+- Not a magic "run every app from every OS" solution.
+- Not a macOS replacement. macOS compatibility is **experimental / future research** — it is not an Alpha promise.
+- Not a Windows replacement. Windows apps run through Wine/Proton compatibility layers, not natively.
+- Not claiming perfect game compatibility. Anti-cheat kernel modules that require Windows are flagged clearly as blockers.
+- Not a finished product. Alpha focuses on the registry, routing, and reporting layer.
+
+---
 
 ## Core Pillars
 
-- Host Runtime: Linux-based foundation for Alpha
-- Compatibility Services: WinEnv and Linux routes first
-- Package Intelligence: Registry contracts and compatibility reporting
-- Desktop Experience: Shell integration contracts
-- Build and Release: CI, containers, and quality gates
+| Pillar | Status |
+|---|---|
+| Linux Host Runtime | Supported |
+| Compatibility Registry | Alpha — 10+ apps seeded |
+| Runtime Router | Alpha — route labels and guidance |
+| Windows App Compatibility (Wine/Proton) | Alpha — contracts and guidance |
+| Game Support | Alpha — Proton routes, anti-cheat flags |
+| Agent Workspaces | Alpha API contracts — execution engine in Alpha 3 |
+| macOS Compatibility | Experimental research — not Alpha |
 
-Reference architecture diagram: `trios_os_architecture.svg`.
+---
+
+## Runtime Routes
+
+| Route | Description |
+|---|---|
+| `native-linux` | Direct Linux binary — best performance |
+| `flatpak` | Sandboxed cross-distro package |
+| `appimage` | Portable binary, no install required |
+| `apt` | System package manager |
+| `wine` | Windows binary compatibility layer |
+| `proton` | Steam's Wine fork with DX translation for games |
+| `container` | Docker/Podman isolated container |
+| `vm` | Full virtual machine for maximum compatibility |
+| `agent-workspace` | Isolated FusionOS workspace (Alpha 3) |
+| `macos-experimental` | Research path — not production ready |
+
+---
 
 ## Repository Layout
 
-```text
-backend/        Express + TypeScript API and tests
-common/         Shared schemas, types, and constants
-frontend/       Frontend application source
-docs/           Architecture and ADR documentation
-infra/          Infrastructure configuration (nginx, etc.)
-scripts/        Local automation scripts
 ```
+FusionOS/
+├── backend-rust/        ← Rust backend (Axum + Tokio) — primary API server
+├── frontend/            ← React + TypeScript + Vite web interface
+├── backend/             ← Legacy Node.js backend (reference only)
+├── common/
+│   ├── types/domain.ts  ← Shared TypeScript domain types
+│   ├── schemas/registry.ts ← Zod validation schemas (frontend)
+│   └── data/compatibility-registry.seed.json ← 10-app seed data
+├── docs/                ← Architecture, roadmap, ADRs
+├── infra/nginx/         ← Nginx reverse proxy config
+├── scripts/             ← USB portable build scripts
+├── docker-compose.yml   ← Local stack: Rust app + Postgres + Redis + Nginx
+└── Dockerfile           ← Multi-stage: Rust build + React build + runtime
+```
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 20+
-- Docker 24+
-- Docker Compose
+- **Rust** 1.78+ (`rustup.rs`)
+- **Node.js** 20+ and npm
 
-### Local Development
+### Run the Rust backend
+
+```bash
+cp .env.example .env
+cd backend-rust
+cargo run
+# Server starts at http://localhost:4000
+```
+
+### Run the frontend dev server
 
 ```bash
 npm install
+npm run dev:frontend
+# UI at http://localhost:5173 (proxies /api to :4000)
+```
+
+### Docker (full stack)
+
+```bash
 cp .env.example .env
-npm run dev
-```
-
-### Full Local Stack (Docker)
-
-```bash
 docker-compose up --build
+# App: http://localhost:8080
 ```
 
-### Offline USB Artifact (Windows/Linux)
+---
 
-Create a portable offline installer bundle:
+## API Quick Reference
 
 ```bash
-npm run build:portable
+# Health
+curl http://localhost:4000/health
+
+# Search apps
+curl "http://localhost:4000/api/v1/apps/search?q=steam"
+
+# Browse all apps
+curl "http://localhost:4000/api/v1/apps/search"
+
+# App detail
+curl http://localhost:4000/api/v1/apps/vscode
+
+# Compatibility reports
+curl http://localhost:4000/api/v1/apps/photoshop/compatibility
+
+# Submit a report
+curl -X POST http://localhost:4000/api/v1/apps/steam/reports \
+  -H "Content-Type: application/json" \
+  -d '{"runtimeRoute":"native-linux","worked":true,"systemProfile":{"arch":"x86_64","ramGb":8,"fusionOsVersion":"0.1.0"},"notes":"Worked perfectly"}'
+
+# Resolve runtime route
+curl -X POST http://localhost:4000/api/v1/runtime/resolve \
+  -H "Content-Type: application/json" \
+  -d '{"appSlug":"photoshop","systemProfile":{"arch":"x86_64","ramGb":8,"fusionOsVersion":"0.1.0"}}'
+
+# Workspaces
+curl http://localhost:4000/api/v1/workspaces
 ```
 
-This command enforces offline-ready artifacts and requires Docker daemon running.
+---
 
-For payload-only development bundles (without offline image tar files):
+## Build
 
 ```bash
-npm run build:portable:payload
+npm run build          # Build frontend
+npm run build:rust     # Build Rust backend
+npm run typecheck      # TypeScript check (frontend)
+npm run lint           # Lint (frontend)
+npm test               # Run legacy backend tests
 ```
 
-On Windows PowerShell:
+---
 
-```powershell
-npm run build:portable:win
-```
+## Compatibility Levels
 
-Detailed instructions are in `docs/INSTALLATION.md`.
+| Level | Meaning |
+|---|---|
+| Platinum | Works perfectly, native support |
+| Gold | Works well, minor issues possible |
+| Silver | Works with known workarounds required |
+| Bronze | Partially works, significant issues |
+| Experimental | Untested or highly variable |
+| Unsupported | Does not work |
 
-### Common Commands
-
-```bash
-npm run typecheck
-npm run lint
-npm run test
-npm run build
-```
-
-## API Quick Check
-
-- `GET /health`
-- `GET /metrics`
-- `GET /api/v1/packages/search?q=photoshop&page=1&pageSize=10`
-
-For API contract details, see `API.md`.
-
-## Testing
-
-```bash
-npm run test
-npm run test:unit
-npm run test:integration
-npm run test:e2e
-```
-
-## Security
-
-- Request validation via Zod
-- Helmet security headers
-- Rate limiting for global and sensitive endpoints
-- Correlation IDs and structured JSON logging
-- Generic internal error responses
-
-If you discover a security issue, open a private report with maintainers before filing a public issue.
-
-## Documentation
-
-- Architecture overview: `docs/ARCHITECTURE.md`
-- Delivery roadmap: `docs/ROADMAP.md`
-- Offline install guide: `docs/INSTALLATION.md`
-- MVP scope: `MVP_SCOPE.md`
-- Architecture decisions:
-  - `docs/adr/ADR-001-kernel-base.md`
-  - `docs/adr/ADR-002-winenv-strategy.md`
-  - `docs/adr/ADR-003-telemetry-policy.md`
+---
 
 ## Contributing
 
-Contributions are welcome. Please read `CONTRIBUTING.md` before opening pull requests.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Priority areas:
+- Add compatibility reports for apps not in the registry
+- Test on different hardware profiles and submit reports
+- Alpha 2: Wine/Proton install automation
+- Alpha 3: Agent workspace execution engine
+
+---
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+MIT — see [LICENSE](LICENSE).

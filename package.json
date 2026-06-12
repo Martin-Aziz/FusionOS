@@ -2,22 +2,26 @@
   "name": "fusionos",
   "version": "0.1.0",
   "private": true,
-  "description": "FusionOS monorepo foundation",
+  "description": "FusionOS — compatibility-first Linux-based OS",
   "license": "MIT",
   "workspaces": [
-    "backend"
+    "backend",
+    "frontend"
   ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "npm --workspace backend run dev",
-    "build": "npm --workspace backend run build",
+    "dev:frontend": "npm --workspace frontend run dev",
+    "dev:rust": "cd backend-rust && cargo run",
+    "build": "npm --workspace frontend run build",
+    "build:rust": "cd backend-rust && cargo build --release",
     "build:portable": "npm run build && bash scripts/build-portable.sh",
     "build:portable:payload": "npm run build && ENFORCE_OFFLINE=0 SKIP_IMAGES=1 bash scripts/build-portable.sh",
     "build:portable:win": "npm run build && powershell -ExecutionPolicy Bypass -File scripts/build-portable.ps1",
-    "typecheck": "npm --workspace backend run typecheck",
-    "lint": "npm --workspace backend run lint",
+    "typecheck": "npm --workspace frontend run typecheck",
+    "lint": "npm --workspace frontend run lint",
     "test": "npm --workspace backend run test",
     "test:unit": "npm --workspace backend run test:unit",
     "test:integration": "npm --workspace backend run test:integration",

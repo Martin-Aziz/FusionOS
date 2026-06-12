@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
+  }
+}
+
+@layer components {
+  .badge-platinum {
+    @apply bg-blue-900 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-gold {
+    @apply bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-silver {
+    @apply bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-bronze {
+    @apply bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-experimental {
+    @apply bg-violet-100 text-violet-800 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-unsupported {
+    @apply bg-red-100 text-red-700 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-unknown {
+    @apply bg-gray-100 text-gray-500 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+}

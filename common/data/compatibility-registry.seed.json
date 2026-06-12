@@ -1,0 +1,307 @@
+[
+  {
+    "id": "app_steam",
+    "name": "Steam",
+    "slug": "steam",
+    "category": "games",
+    "description": "Valve's gaming platform with a native Linux client and built-in Proton compatibility layer for Windows games.",
+    "recommendedRoute": "native-linux",
+    "alternativeRoutes": ["flatpak"],
+    "compatibilityLevel": "platinum",
+    "knownIssues": [],
+    "hardwareNotes": [
+      { "component": "gpu", "note": "NVIDIA proprietary drivers or AMD Mesa recommended for best Proton performance." }
+    ],
+    "gameSupport": {
+      "anticheatRisk": false,
+      "protonDbRating": "Platinum",
+      "controllerSupport": true,
+      "launchers": ["steam"]
+    },
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 412,
+    "installAction": {
+      "method": "native-linux",
+      "command": "sudo apt install steam",
+      "notes": "Enable the multiverse repository first on Ubuntu/Debian."
+    }
+  },
+  {
+    "id": "app_vscode",
+    "name": "VS Code",
+    "slug": "vscode",
+    "category": "development",
+    "description": "Microsoft's open-source code editor. Official .deb and .rpm packages available; also distributed as a Flatpak and Snap.",
+    "recommendedRoute": "native-linux",
+    "alternativeRoutes": ["flatpak", "appimage"],
+    "compatibilityLevel": "platinum",
+    "knownIssues": [
+      {
+        "id": "vscode-1",
+        "title": "Snap version has filesystem sandbox restrictions",
+        "severity": "minor",
+        "description": "The Snap distribution restricts access to some filesystem paths by default.",
+        "workaround": "Use the .deb package or Flatpak for unrestricted filesystem access."
+      }
+    ],
+    "hardwareNotes": [],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 890,
+    "installAction": {
+      "method": "apt",
+      "command": "sudo apt install code",
+      "notes": "Add the Microsoft GPG key and repo first. See code.visualstudio.com/docs/setup/linux."
+    }
+  },
+  {
+    "id": "app_blender",
+    "name": "Blender",
+    "slug": "blender",
+    "category": "creative",
+    "description": "Open-source 3D creation suite. First-class Linux support with official builds and active development on Linux.",
+    "recommendedRoute": "native-linux",
+    "alternativeRoutes": ["flatpak", "appimage"],
+    "compatibilityLevel": "gold",
+    "knownIssues": [
+      {
+        "id": "blender-1",
+        "title": "CUDA rendering requires NVIDIA proprietary drivers",
+        "severity": "minor",
+        "description": "GPU rendering via CUDA is only available with the NVIDIA proprietary driver stack.",
+        "workaround": "Use CPU rendering or switch to Cycles OptiX / HIP (AMD) for GPU rendering."
+      }
+    ],
+    "hardwareNotes": [
+      { "component": "gpu", "note": "AMD RDNA2+ cards work well with HIP rendering. NVIDIA requires proprietary drivers for CUDA/OptiX." }
+    ],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 203,
+    "installAction": {
+      "method": "flatpak",
+      "command": "flatpak install flathub org.blender.Blender",
+      "notes": "Official Flatpak is maintained by the Blender Foundation and typically ships the latest stable release."
+    }
+  },
+  {
+    "id": "app_docker",
+    "name": "Docker",
+    "slug": "docker",
+    "category": "development",
+    "description": "Container platform for building, running, and sharing containerized applications. Native Linux support via the Docker Engine daemon.",
+    "recommendedRoute": "native-linux",
+    "alternativeRoutes": ["container"],
+    "compatibilityLevel": "gold",
+    "knownIssues": [
+      {
+        "id": "docker-1",
+        "title": "Requires Linux kernel ≥5.15",
+        "severity": "major",
+        "description": "Docker Engine relies on kernel features (cgroups v2, overlayfs) that require kernel 5.15 or later.",
+        "workaround": "FusionOS ships kernel ≥6.1. Upgrade the kernel if running on a custom base."
+      },
+      {
+        "id": "docker-2",
+        "title": "rootless mode requires user namespace support",
+        "severity": "minor",
+        "description": "Rootless Docker requires unprivileged user namespaces enabled in the kernel.",
+        "workaround": "Run `sudo sysctl -w kernel.unprivileged_userns_clone=1` or use root mode."
+      }
+    ],
+    "hardwareNotes": [],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 517,
+    "installAction": {
+      "method": "native-linux",
+      "command": "curl -fsSL https://get.docker.com | sh",
+      "notes": "Official install script. Review before running in production environments."
+    }
+  },
+  {
+    "id": "app_obs_studio",
+    "name": "OBS Studio",
+    "slug": "obs-studio",
+    "category": "creative",
+    "description": "Free, open-source software for video recording and live streaming. Well-maintained Linux support via V4L2, PipeWire, and Wayland.",
+    "recommendedRoute": "native-linux",
+    "alternativeRoutes": ["flatpak"],
+    "compatibilityLevel": "gold",
+    "knownIssues": [
+      {
+        "id": "obs-1",
+        "title": "Screen capture on Wayland requires PipeWire",
+        "severity": "minor",
+        "description": "On Wayland compositors, screen capture requires PipeWire and the xdg-desktop-portal-wlr or xdg-desktop-portal-gnome portal.",
+        "workaround": "Install pipewire, wireplumber, and the appropriate portal for your desktop environment."
+      }
+    ],
+    "hardwareNotes": [
+      { "component": "gpu", "note": "NVENC (NVIDIA) and VA-API (AMD/Intel) hardware encoding are supported on Linux." }
+    ],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 178,
+    "installAction": {
+      "method": "apt",
+      "command": "sudo apt install obs-studio",
+      "notes": "Install from the official PPA for the latest version: ppa:obsproject/obs-studio"
+    }
+  },
+  {
+    "id": "app_photoshop",
+    "name": "Adobe Photoshop",
+    "slug": "photoshop",
+    "category": "creative",
+    "description": "Adobe's professional image editing software. No native Linux build exists. Runs via Wine with varying stability depending on version and GPU.",
+    "recommendedRoute": "wine",
+    "alternativeRoutes": ["vm"],
+    "compatibilityLevel": "silver",
+    "knownIssues": [
+      {
+        "id": "ps-1",
+        "title": "GPU acceleration not supported",
+        "severity": "major",
+        "description": "Photoshop's GPU acceleration (OpenGL/Metal) does not work under Wine. Performance is CPU-only.",
+        "workaround": "Disable GPU acceleration in Photoshop preferences: Edit → Preferences → Performance → uncheck Use Graphics Processor."
+      },
+      {
+        "id": "ps-2",
+        "title": "Font rendering inconsistencies",
+        "severity": "minor",
+        "description": "Some Windows system fonts are missing under Wine. Text rendering may differ from native Windows.",
+        "workaround": "Install Windows core fonts via winetricks: `winetricks corefonts`."
+      },
+      {
+        "id": "ps-3",
+        "title": "Creative Cloud installer may fail",
+        "severity": "major",
+        "description": "The Adobe Creative Cloud desktop app does not run reliably under Wine. Direct Photoshop installer is more reliable.",
+        "workaround": "Use a standalone Photoshop installer (CS6 or older is most stable). Newer CC versions have lower compatibility."
+      }
+    ],
+    "hardwareNotes": [
+      { "component": "gpu", "note": "GPU acceleration is non-functional under Wine. Expect slower performance on large files." }
+    ],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 94,
+    "installAction": {
+      "method": "wine",
+      "command": "wine Photoshop_installer.exe",
+      "notes": "Use Wine 8.x or later. A 64-bit Wine prefix is required for CC versions. Consider Lutris for managed Wine prefixes."
+    }
+  },
+  {
+    "id": "app_excel",
+    "name": "Microsoft Excel",
+    "slug": "excel",
+    "category": "productivity",
+    "description": "Microsoft's spreadsheet application. No native Linux build. Runs via Wine; basic functionality works, advanced macros and add-ins have limited support.",
+    "recommendedRoute": "wine",
+    "alternativeRoutes": ["vm"],
+    "compatibilityLevel": "silver",
+    "knownIssues": [
+      {
+        "id": "excel-1",
+        "title": "VBA macro compatibility is partial",
+        "severity": "major",
+        "description": "Complex VBA macros and Excel add-ins (VSTO, COM add-ins) do not function correctly under Wine.",
+        "workaround": "Use LibreOffice Calc for macro-heavy workbooks, or run Excel in a VM for full macro support."
+      },
+      {
+        "id": "excel-2",
+        "title": "Some chart types render incorrectly",
+        "severity": "minor",
+        "description": "Advanced chart types may have rendering artifacts under Wine's GDI+ implementation.",
+        "workaround": "Export charts as images, or use a VM for presentation-quality output."
+      }
+    ],
+    "hardwareNotes": [],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 67,
+    "installAction": {
+      "method": "wine",
+      "command": "wine OfficeSetup.exe",
+      "notes": "Microsoft 365 installer works with Wine 8.x for Excel 2016/2019. Newer M365 versions have lower success rates."
+    }
+  },
+  {
+    "id": "app_league_of_legends",
+    "name": "League of Legends",
+    "slug": "league-of-legends",
+    "category": "games",
+    "description": "Riot Games' multiplayer online battle arena. Runs via Proton/Wine. Anti-cheat (Vanguard) is the primary compatibility blocker.",
+    "recommendedRoute": "proton",
+    "alternativeRoutes": [],
+    "compatibilityLevel": "bronze",
+    "knownIssues": [
+      {
+        "id": "lol-1",
+        "title": "Vanguard anti-cheat is incompatible with Linux",
+        "severity": "blocking",
+        "description": "Riot's Vanguard kernel-level anti-cheat requires Windows and does not run under Linux. This blocks ranked and competitive modes.",
+        "workaround": "No current workaround. Riot has not committed to a Linux-compatible anti-cheat solution. Monitor the official Riot Linux support thread."
+      }
+    ],
+    "hardwareNotes": [
+      { "component": "gpu", "note": "Game renders correctly under DXVK via Proton. Low-end GPUs (Intel integrated included) are generally sufficient." }
+    ],
+    "gameSupport": {
+      "anticheatRisk": true,
+      "anticheatNotes": "Vanguard kernel-level anti-cheat is incompatible with Linux. Competitive play is blocked.",
+      "protonDbRating": "Borked",
+      "controllerSupport": false,
+      "launchers": ["riot-client"]
+    },
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 31,
+    "installAction": {
+      "method": "proton",
+      "command": "# Install via Lutris with the community LoL script",
+      "notes": "Riot Client may launch, but Vanguard will block the game from starting. Not recommended until Riot provides a Linux-compatible path."
+    }
+  },
+  {
+    "id": "app_cursor",
+    "name": "Cursor",
+    "slug": "cursor",
+    "category": "development",
+    "description": "AI-assisted code editor built on VS Code. Distributed as an AppImage for Linux. Works well out of the box on most distributions.",
+    "recommendedRoute": "appimage",
+    "alternativeRoutes": ["flatpak"],
+    "compatibilityLevel": "gold",
+    "knownIssues": [
+      {
+        "id": "cursor-1",
+        "title": "FUSE required for AppImage execution",
+        "severity": "minor",
+        "description": "AppImages require FUSE 2 to mount and execute. Some minimal distributions do not include it by default.",
+        "workaround": "Install libfuse2: `sudo apt install libfuse2`. Alternatively, extract the AppImage: `./Cursor.AppImage --appimage-extract`."
+      }
+    ],
+    "hardwareNotes": [],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 156,
+    "installAction": {
+      "method": "appimage",
+      "command": "chmod +x Cursor-*.AppImage && ./Cursor-*.AppImage",
+      "notes": "Download the latest AppImage from cursor.com. Requires libfuse2 on Ubuntu/Debian."
+    }
+  },
+  {
+    "id": "app_python",
+    "name": "Python",
+    "slug": "python",
+    "category": "development",
+    "description": "Python runtime. Pre-installed on most Linux distributions. Multiple versions can coexist via pyenv or system package manager.",
+    "recommendedRoute": "apt",
+    "alternativeRoutes": ["container", "flatpak"],
+    "compatibilityLevel": "platinum",
+    "knownIssues": [],
+    "hardwareNotes": [],
+    "lastVerifiedAt": "2026-06-01T00:00:00.000Z",
+    "reportCount": 1240,
+    "installAction": {
+      "method": "apt",
+      "command": "sudo apt install python3 python3-pip python3-venv",
+      "notes": "For multiple Python versions, consider pyenv: github.com/pyenv/pyenv"
+    }
+  }
+]

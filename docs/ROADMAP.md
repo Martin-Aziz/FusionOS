@@ -1,25 +1,47 @@
-# TriOS Delivery Roadmap
+# FusionOS Delivery Roadmap
 
-## Phase 0
+## Alpha 1 — Compatibility Intelligence (Current)
 
-- Scope lock and architecture baseline
-- Monorepo and quality gate scaffolding
-- Security and observability baseline
+- Compatibility registry API (Rust/Axum)
+- 10-app seed dataset with honest compatibility ratings
+- Runtime route labels, known issues, hardware notes
+- Community report submission
+- Runtime resolver endpoint
+- Web frontend: homepage, registry browser, app detail, runtime router explainer, workspace management UI
+- Agent workspace API contracts (stub execution)
+- Docker single-container deployment (Rust + React)
 
-## Phase 1
+## Alpha 2 — Managed Runtime Environments
 
-- Registry backend persistence hardening
-- TriPKG CLI install/update/remove flows
-- WinEnv and Linux adapter execution contracts
+- Persistent storage: PostgreSQL adapter replacing in-memory repository
+- Wine/Proton prefix management: install logs, known fix scripts, diagnostics
+- Report submission improvements: hardware auto-detection, version validation
+- Registry expansion: 50+ apps with community contributions
+- macOS experimental route: early research integration (marked clearly as experimental)
+- USB offline installer update for Rust binary
 
-## Phase 2
+## Alpha 3 — Agent Workspaces
 
-- TriShell launcher integration
-- Installer and first-run flow
-- Documentation completion for Alpha release
+- Real agent workspace execution engine
+- Filesystem sandboxing (Linux namespaces / seccomp)
+- Network access control (nftables / eBPF)
+- Execution log streaming
+- Workspace rollback state
+- Agent runtime access: native-linux, container, and python-env routes
 
-## Phase 3
+## Beta — Community Compatibility Database
 
-- CI hardening and release artifact signing
-- Compatibility matrix validation
-- Alpha release and feedback loops
+- Public app registry with community-submitted entries
+- Verified maintainer roles
+- Hardware profile matching
+- App voting and trust scores
+- Community fix scripts with verification
+- Authentication: device tokens, optional accounts
+- Game compatibility matrix expansion
+
+## Long-term Research
+
+- macOS compatibility path (XNU syscall translation — research only, no timeline)
+- ARM / RISC-V builds
+- Custom microkernel investigation (post-Beta)
+- GUI OS installer
